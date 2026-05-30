@@ -54,7 +54,7 @@ public class PersonRepository : IPersonRepository
         return await _context
             .Persons
             .Include(x => x.Founders)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
     public async Task<PersonDto?> GetByInnAsync(string inn, CancellationToken ct = default)
@@ -101,10 +101,10 @@ public class PersonRepository : IPersonRepository
 
     public async Task UpdateAsync(Person person, CancellationToken ct = default)
     {
-        if (_context.Entry(person).State == EntityState.Detached)
-        {
-            _context.Update(person);
-        }
+        //if (_context.Entry(person).State == EntityState.Detached)
+        //{
+        //    _context.Update(person);
+        //}
 
         await _context.SaveChangesAsync(ct);
     }

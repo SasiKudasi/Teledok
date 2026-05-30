@@ -109,9 +109,9 @@ public class Person : Entity
         founder.ChangeFullName(fullName);
     }
 
-    public void RemoveFounder(Guid founderId)
+    public void RemoveFounder(string founderInn)
     {
-        var founder = _founders.FirstOrDefault(f => f.Id == founderId);
+        var founder = _founders.FirstOrDefault(f => f.INN == founderInn);
         if (founder != null)
         {
             _founders.Remove(founder);

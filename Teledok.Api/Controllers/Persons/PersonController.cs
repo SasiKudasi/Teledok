@@ -163,13 +163,13 @@ namespace Teledok.Api.Controllers.Persons
         /// <summary>
         /// Удалить учредителя из юридического лица.
         /// </summary>
-        [HttpDelete("founders/{personId:guid}/{founderId:guid}")]
+        [HttpDelete("founders/{personId:guid}/{founderInn}")]
         [ProducesResponseType(typeof(RemoveFounderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<RemoveFounderResponse>> RemoveFounder(Guid personId, Guid founderId, CancellationToken cancellationToken)
+        public async Task<ActionResult<RemoveFounderResponse>> RemoveFounder(Guid personId, string founderInn, CancellationToken cancellationToken)
         {
-            var request = new RemoveFounderRequest(personId, founderId);
+            var request = new RemoveFounderRequest(personId, founderInn);
             var result = await _personService.RemoveFounderAsync(request, cancellationToken);
             return HandleResult(result);
         }

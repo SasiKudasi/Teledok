@@ -56,7 +56,7 @@ public class PersonService : IPersonService
 
         foreach (var founderReq in request.Founders)
         {
-            person.AddFounder(Founder.Create(null, founderReq.Name, founderReq.INN, DateTime.UtcNow, DateTime.UtcNow));
+            person.AddFounder(Founder.Create(null, founderReq.INN, founderReq.Name, DateTime.UtcNow, DateTime.UtcNow));
 
             if (!person.IsValid)
             {
@@ -189,10 +189,10 @@ public class PersonService : IPersonService
             return ApplicationResult<UpdateFounderResponse>.NotFound($"Person with id: {request.PersonId} not found");
         }
 
-        var founder = person.Founders.FirstOrDefault(f => f.Id == request.FounderId);
+        var founder = person.Founders.FirstOrDefault(f => f.INN == request.FounderInn);
         if (founder is null)
         {
-            return ApplicationResult<UpdateFounderResponse>.NotFound($"Founder with id: {request.FounderId} not found");
+            return ApplicationResult<UpdateFounderResponse>.NotFound($"Founder with id: {request.FounderInn} not found");
         }
 
         person.ChangeFounderFullName(founder, request.Name);
@@ -214,13 +214,13 @@ public class PersonService : IPersonService
             return ApplicationResult<RemoveFounderResponse>.NotFound($"Person with id: {request.PersonId} not found");
         }
 
-        var founder = person.Founders.FirstOrDefault(f => f.Id == request.FounderId);
+        var founder = person.Founders.FirstOrDefault(f => f.INN == request.FounderInn);
         if (founder is null)
         {
-            return ApplicationResult<RemoveFounderResponse>.NotFound($"Founder with id: {request.FounderId} not found");
+            return ApplicationResult<RemoveFounderResponse>.NotFound($"Founder with id: {request.FounderInn} not found");
         }
 
-        person.RemoveFounder(request.FounderId);
+        person.RemoveFounder(request.FounderInn);
         await _personRepository.UpdateAsync(person, cancellationToken);
         return ApplicationResult<RemoveFounderResponse>.Success(new RemoveFounderResponse(person.Id, founder.Id));
     }
