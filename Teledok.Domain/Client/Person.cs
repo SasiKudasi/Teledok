@@ -1,5 +1,5 @@
-﻿using Teledok.Domain.Client.Validation;
-using Teledok.Domain.Enums;
+﻿using Teledok.Contracts.Shared.Enums;
+using Teledok.Domain.Client.Validation;
 using Teledok.Domain.Shared;
 
 namespace Teledok.Domain.Client;
@@ -21,7 +21,10 @@ public class Person : Entity
     private readonly List<Founder> _founders = [];
     public IReadOnlyCollection<Founder> Founders => _founders;
 
-
+    private Person()
+    {
+        
+    }
     private Person(Guid id, string inn, string name, ClientType type, DateTime created, DateTime updated)
     {
         Id = id;

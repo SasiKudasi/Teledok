@@ -1,4 +1,4 @@
-﻿namespace Teledok.Domain.Enums;
+﻿namespace Teledok.Contracts.Shared.Enums;
 
 public enum ClientType
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Teledok.Contracts.Shared.DTOs;
 using Teledok.Domain.Client;
 using Teledok.Infrastructure.ClientContext;
 
@@ -19,38 +20,93 @@ public class PersonRepository : IPersonRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(Person person, CancellationToken ct = default)
+    public async Task DeleteAsync(Person person, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Person>> GetAllAsync(CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Person?> GetByIdAsync(Guid id, bool includeFounders, CancellationToken ct = default)
-    {
-        IQueryable<Person> q =  _context.Set<Person>();
-        if (includeFounders)
+        if (_context.Entry(person).State == EntityState.Detached)
         {
-            q = q.Include(x => x.Founders);
+            _context.Attach(person);
         }
-        return await q.FirstOrDefaultAsync(x => x.Id == id);
+
+        _context.Remove(person);
+        await _context.SaveChangesAsync(ct);
     }
 
-    public async Task<Person?> GetByInnAsync(string inn, bool includeFounders, CancellationToken ct = default)
+    public async Task<List<PersonDto>> GetAllAsync(CancellationToken ct = default)
     {
-        IQueryable<Person> q = _context.Set<Person>();
-        if (includeFounders)
+        return await _context.Persons
+            .AsNoTracking()
+            .Select(x =>
+                 new PersonDto
+                 {
+                     Id = x.Id,
+                     Inn = x.INN,
+                     Name = x.Name,
+                     Type = x.Type,
+                     CreatedAt = x.CreatedAt,
+                     UpdatedAt = x.UpdatedAt
+                 }
+            )
+            .ToListAsync(ct);
+    }
+
+    public async Task<Person?> GetByIdAsync(Guid id, CancellationToken ct = default)
+    {
+        return await _context
+            .Persons
+            .Include(x => x.Founders)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<PersonDto?> GetByInnAsync(string inn, CancellationToken ct = default)
+    {
+        return await _context.Persons
+            .AsNoTracking()
+            .Where(x => x.INN == inn)
+            .Select(x => new PersonDto
+            {
+                Inn = x.INN,
+                Name = x.Name,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                Type = x.Type,
+            })
+        .FirstOrDefaultAsync(ct);
+    }
+
+
+    public async Task<PersonDtoWithFounders?> GetByInnWithFoundersAsync(string inn, CancellationToken ct = default)
+    {
+        return await _context.Persons
+            .AsNoTracking()
+            .Where(x => x.INN == inn)
+            .Include(x => x.Founders)
+            .Select(x => new PersonDtoWithFounders
+            {
+                Inn = x.INN,
+                Name = x.Name,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                Type = x.Type,
+                Founders = x.Founders.Select(f => new FounderDto
+                {
+                    INN = f.INN,
+                    FullName = f.FullName,
+                    CreatedAt = f.CreatedAt,
+                    UpdatedAt = f.UpdatedAt
+                }).ToList()
+            })
+        .FirstOrDefaultAsync(ct);
+    }
+
+
+    public async Task UpdateAsync(Person person, CancellationToken ct = default)
+    {
+        if (_context.Entry(person).State == EntityState.Detached)
         {
-            q = q.Include(x => x.Founders);
+            _context.Update(person);
         }
-        return await q.FirstOrDefaultAsync(x => x.INN == inn);
+
+        await _context.SaveChangesAsync(ct);
     }
 
-    public Task UpdateAsync(Person person, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
 }

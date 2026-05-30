@@ -21,5 +21,9 @@
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Controllers\Persons\" />
 	</ItemGroup>
 </Project>

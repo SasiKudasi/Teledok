@@ -11,6 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Teledok.Contracts.Shared\Teledok.Contracts.Shared.csproj" />
 	  <ProjectReference Include="..\Teledok.Domain\Teledok.Domain.csproj" />
 	</ItemGroup>
 

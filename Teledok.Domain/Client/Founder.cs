@@ -12,6 +12,10 @@ public class Founder : Entity
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
+    private Founder()
+    {
+        
+    }
     internal Founder(Guid id, string inn, string fullName, DateTime created, DateTime updated)
     {
         Id = id;
