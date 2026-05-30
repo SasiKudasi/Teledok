@@ -53,7 +53,7 @@ public class Person : Entity
 
     public static Founder CreateFounder(Guid? id, string inn, string fullName, DateTime created, DateTime updated)
     {
-        var founder = new Founder(
+        var founder = Founder.Create(
             id ?? Guid.NewGuid(),
             inn,
             fullName,
@@ -107,6 +107,15 @@ public class Person : Entity
     public void ChangeFounderFullName(Founder founder, string fullName)
     {
         founder.ChangeFullName(fullName);
+    }
+
+    public void RemoveFounder(Guid founderId)
+    {
+        var founder = _founders.FirstOrDefault(f => f.Id == founderId);
+        if (founder != null)
+        {
+            _founders.Remove(founder);
+        }
     }
 
 }

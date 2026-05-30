@@ -64,7 +64,7 @@ public class PersonService : IPersonService
             }
         }
 
-        await _personRepository.AddAsync(person);
+        await _personRepository.AddAsync(person, cancellationToken);
 
         return ApplicationResult<CreatePersonWithFounderResponse>.Success(new CreatePersonWithFounderResponse(person.Id));
 
@@ -103,7 +103,7 @@ public class PersonService : IPersonService
                         CreatedAt = x.CreatedAt,
                         UpdatedAt = x.UpdatedAt
                     };
-                }).ToList() : null
+                }).ToList() : new List<FounderDto>()
         };
 
         return ApplicationResult<PersonDtoWithFounders>.Success(result);
@@ -130,5 +130,99 @@ public class PersonService : IPersonService
         return ApplicationResult<PersonDtoWithFounders>.Success(person);
     }
 
+    public async Task<ApplicationResult<UpdatePersonResponse>> UpdatePersonAsync(UpdatePersonRequest request, CancellationToken cancellationToken)
+    {
+        var person = await _personRepository.GetByIdAsync(request.Id, cancellationToken);
+        if (person is null)
+        {
+            return ApplicationResult<UpdatePersonResponse>.NotFound($"Person with id: {request.Id} not found");
+        }
+
+        person.ChangeName(request.Name);
+
+        if (!person.IsValid)
+        {
+            return ApplicationResult<UpdatePersonResponse>.Fail(person.Error!.Details!);
+        }
+
+        await _personRepository.UpdateAsync(person, cancellationToken);
+        return ApplicationResult<UpdatePersonResponse>.Success(new UpdatePersonResponse(person.Id));
+    }
+
+    public async Task<ApplicationResult<DeletePersonResponse>> DeletePersonAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var person = await _personRepository.GetByIdAsync(id, cancellationToken);
+        if (person is null)
+        {
+            return ApplicationResult<DeletePersonResponse>.NotFound($"Person with id: {id} not found");
+        }
+
+        await _personRepository.DeleteAsync(person, cancellationToken);
+        return ApplicationResult<DeletePersonResponse>.Success(new DeletePersonResponse(person.Id));
+    }
+
+    public async Task<ApplicationResult<AddFounderResponse>> AddFounderAsync(AddFounderRequest request, CancellationToken cancellationToken)
+    {
+        var person = await _personRepository.GetByIdAsync(request.PersonId, cancellationToken);
+        if (person is null)
+        {
+            return ApplicationResult<AddFounderResponse>.NotFound($"Person with id: {request.PersonId} not found");
+        }
+
+        var founder = Founder.Create(null, request.INN, request.Name, DateTime.UtcNow, DateTime.UtcNow);
+        person.AddFounder(founder);
+
+        if (!person.IsValid)
+        {
+            return ApplicationResult<AddFounderResponse>.Fail(person.Error!.Details!);
+        }
+
+        await _personRepository.UpdateAsync(person, cancellationToken);
+        return ApplicationResult<AddFounderResponse>.Success(new AddFounderResponse(person.Id, founder.Id));
+    }
+
+    public async Task<ApplicationResult<UpdateFounderResponse>> UpdateFounderAsync(UpdateFounderRequest request, CancellationToken cancellationToken)
+    {
+        var person = await _personRepository.GetByIdAsync(request.PersonId, cancellationToken);
+        if (person is null)
+        {
+            return ApplicationResult<UpdateFounderResponse>.NotFound($"Person with id: {request.PersonId} not found");
+        }
+
+        var founder = person.Founders.FirstOrDefault(f => f.Id == request.FounderId);
+        if (founder is null)
+        {
+            return ApplicationResult<UpdateFounderResponse>.NotFound($"Founder with id: {request.FounderId} not found");
+        }
+
+        person.ChangeFounderFullName(founder, request.Name);
+
+        if (!person.IsValid)
+        {
+            return ApplicationResult<UpdateFounderResponse>.Fail(person.Error!.Details!);
+        }
+
+        await _personRepository.UpdateAsync(person, cancellationToken);
+        return ApplicationResult<UpdateFounderResponse>.Success(new UpdateFounderResponse(person.Id, founder.Id));
+    }
+
+    public async Task<ApplicationResult<RemoveFounderResponse>> RemoveFounderAsync(RemoveFounderRequest request, CancellationToken cancellationToken)
+    {
+        var person = await _personRepository.GetByIdAsync(request.PersonId, cancellationToken);
+        if (person is null)
+        {
+            return ApplicationResult<RemoveFounderResponse>.NotFound($"Person with id: {request.PersonId} not found");
+        }
+
+        var founder = person.Founders.FirstOrDefault(f => f.Id == request.FounderId);
+        if (founder is null)
+        {
+            return ApplicationResult<RemoveFounderResponse>.NotFound($"Founder with id: {request.FounderId} not found");
+        }
+
+        person.RemoveFounder(request.FounderId);
+        await _personRepository.UpdateAsync(person, cancellationToken);
+        return ApplicationResult<RemoveFounderResponse>.Success(new RemoveFounderResponse(person.Id, founder.Id));
+    }
 
 }
