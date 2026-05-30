@@ -1,5 +1,5 @@
 ﻿
 namespace Teledok.Contracts.Shared.Responses;
 
-public record CreatePersonResponse(Guid Id);
+public sealed record CreatePersonResponse(Guid Id);
 

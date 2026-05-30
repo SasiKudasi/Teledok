@@ -6,17 +6,28 @@ namespace Teledok.Application.Shared
     {
         public bool IsSuccess { get; }
         public T Value { get; }
-        public ErrorModel Fail { get; }
+        public ErrorModel Error { get; }
 
         private ApplicationResult(bool isSuccess, T value, string? errorMsg)
         {
             IsSuccess = isSuccess;
             Value = value;
-            Fail = new ErrorModel(ErrorType.ApplicationError, errorMsg);
+            Error = new ErrorModel(ErrorType.ApplicationError, errorMsg);
         }
+
+
+        private ApplicationResult(string? errorMsg)
+        {
+            IsSuccess = false;
+            Value = default;
+            Error = new ErrorModel(ErrorType.NotFound, errorMsg);
+        }
+
 
         public static ApplicationResult<T> Success(T value) => new(true, value, null);
         public static ApplicationResult<T> Fail(string errorMsg) => new(false, default, errorMsg);
+        public static ApplicationResult<T> NotFound(string errorMsg) => new(errorMsg);
+        
 
     }
 }

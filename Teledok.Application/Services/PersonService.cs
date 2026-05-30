@@ -29,7 +29,7 @@ public class PersonService : IPersonService
 
         if (!person.IsValid)
         {
-            return ApplicationResult<CreatePersonResponse>.Fail(person.Error.Details);
+            return ApplicationResult<CreatePersonResponse>.Fail(person.Error!.Details!);
         }
 
         await _personRepository.AddAsync(person);
@@ -76,19 +76,58 @@ public class PersonService : IPersonService
         return ApplicationResult<List<PersonDto>>.Success(persons);
     }
 
-    public async Task<ApplicationResult<GetPersonByIdRequest>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ApplicationResult<PersonDtoWithFounders>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
+        var person = await _personRepository.GetByIdAsync(id, cancellationToken);
+        if (person is null)
+        {
+            return ApplicationResult<PersonDtoWithFounders>.NotFound($"Person with id: {id} not found");
+        }
+
+
+        var result = new PersonDtoWithFounders
+        {
+            Id = person.Id,
+            Inn = person.INN,
+            CreatedAt = person.CreatedAt,
+            UpdatedAt = person.UpdatedAt,
+            Type = person.Type,
+            Founders = person.Type == ClientType.LegalEntity ?
+                person.Founders
+                .Select(x =>
+                {
+                    return new FounderDto
+                    {
+                        INN = x.INN,
+                        FullName = x.FullName,
+                        CreatedAt = x.CreatedAt,
+                        UpdatedAt = x.UpdatedAt
+                    };
+                }).ToList() : null
+        };
+
+        return ApplicationResult<PersonDtoWithFounders>.Success(result);
 
     }
 
     public async Task<ApplicationResult<PersonDto>> GetPersonByInnAsync(string inn, CancellationToken cancellationToken)
     {
-
+        var person = await _personRepository.GetByInnAsync(inn, cancellationToken);
+        if (person is null)
+        {
+            return ApplicationResult<PersonDto>.NotFound($"Person with INN: {inn} not found");
+        }
+        return ApplicationResult<PersonDto>.Success(person);
     }
 
     public async Task<ApplicationResult<PersonDtoWithFounders>> GetLegalEntityByInnWithFoundersAsync(string inn, CancellationToken cancellationToken)
     {
-
+        var person = await _personRepository.GetByInnWithFoundersAsync(inn, cancellationToken);
+        if (person is null)
+        {
+            return ApplicationResult<PersonDtoWithFounders>.NotFound($"Person with INN: {inn} not found");
+        }
+        return ApplicationResult<PersonDtoWithFounders>.Success(person);
     }
 
 
