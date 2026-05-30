@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="../Teledok.Api.Shared/Teledok.Api.Shared.csproj" />
+  <Project Path="../Teledok.Application/Teledok.Application.csproj" />
+  <Project Path="../Teledok.Domain.Shared/Teledok.Domain.Shared.csproj" />
+  <Project Path="../Teledok.Domain/Teledok.Domain.csproj" />
+  <Project Path="../Teledok.Infrastructure/Teledok.Infrastructure.csproj" />
+  <Project Path="Teledok.Api.csproj" />
+</Solution>

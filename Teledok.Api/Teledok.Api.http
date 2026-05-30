@@ -1,0 +1,6 @@
+@Teledok.Api_HostAddress = http://localhost:5255
+
+GET {{Teledok.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
