@@ -1,7 +1,4 @@
-﻿
-using System.Security.Cryptography;
-
-namespace Teledok.Domain.Shared;
+﻿namespace Teledok.Domain.Shared;
 
 public abstract class Entity : IEntity
 {

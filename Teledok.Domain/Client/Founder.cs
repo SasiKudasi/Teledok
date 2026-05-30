@@ -16,7 +16,7 @@ public class Founder : Entity
     {
         
     }
-    internal Founder(Guid id, string inn, string fullName, DateTime created, DateTime updated)
+    private Founder(Guid id, string inn, string fullName, DateTime created, DateTime updated)
     {
         Id = id;
         INN = inn;
@@ -25,6 +25,16 @@ public class Founder : Entity
         UpdatedAt = updated;
     }
     
+    public static Founder Create(Guid? id, string inn, string fullName, DateTime created, DateTime updated)
+    {
+        return new Founder(
+            id ?? Guid.NewGuid(),
+            inn,
+            fullName,
+            created,
+            updated);
+    }
+
     internal static void ValidateFounder(Founder founder)
     {
         var validationInn = ValidationRules.CheckInn(founder.INN);
