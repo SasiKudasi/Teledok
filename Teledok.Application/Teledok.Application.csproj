@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <ProjectReference Include="..\Teledok.Application.Shared\Teledok.Application.Shared.csproj" />
+    <ProjectReference Include="..\Teledok.Contracts.Shared\Teledok.Contracts.Shared.csproj" />
     <ProjectReference Include="..\Teledok.Domain\Teledok.Domain.csproj" />
+    <ProjectReference Include="..\Teledok.Infrastructure\Teledok.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
