@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Teledok.Contracts.Shared.DTOs;
+using Teledok.Contracts.Shared.Enums;
 using Teledok.Domain.Client;
 using Teledok.Infrastructure.ClientContext;
 
@@ -63,8 +64,10 @@ public class PersonRepository : IPersonRepository
         return await _context.Persons
             .AsNoTracking()
             .Where(x => x.INN == inn)
+            .Where(x => x.Type == ClientType.IndividualEntrepreneur)
             .Select(x => new PersonDto
             {
+                Id = x.Id,
                 Inn = x.INN,
                 Name = x.Name,
                 CreatedAt = x.CreatedAt,
@@ -80,9 +83,11 @@ public class PersonRepository : IPersonRepository
         return await _context.Persons
             .AsNoTracking()
             .Where(x => x.INN == inn)
+            .Where(x => x.Type == ClientType.LegalEntity)
             .Include(x => x.Founders)
             .Select(x => new PersonDtoWithFounders
             {
+                Id = x.Id,
                 Inn = x.INN,
                 Name = x.Name,
                 CreatedAt = x.CreatedAt,

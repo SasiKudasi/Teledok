@@ -38,7 +38,7 @@ internal static class ValidationRules
             return "Duplicate founder";
         }
 
-        return CheckInn(founderInn);
+        return CheckInn(founderInn, clientType);
     }
 
 

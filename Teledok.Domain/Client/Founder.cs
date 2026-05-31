@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Metrics;
+using Teledok.Contracts.Shared.Enums;
 using Teledok.Domain.Client.Validation;
 using Teledok.Domain.Shared;
 
@@ -41,7 +42,7 @@ public class Founder : Entity
 
     internal static void ValidateFounder(Founder founder)
     {
-        var validationInn = ValidationRules.CheckInn(founder.INN);
+        var validationInn = ValidationRules.CheckInn(founder.INN, ClientType.LegalEntity);
         if (validationInn != null)
         {
             founder.SetError(validationInn);

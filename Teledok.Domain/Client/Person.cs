@@ -79,7 +79,7 @@ public class Person : Entity
 
     private static void ValidatePerson(Person person)
     {
-        var validationInn = ValidationRules.CheckInn(person.INN);
+        var validationInn = ValidationRules.CheckInn(person.INN, person.Type);
         if (validationInn != null)
         {
             person.SetError(validationInn);

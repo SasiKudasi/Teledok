@@ -145,7 +145,7 @@ public class PersonService : IPersonService
             return ApplicationResult<UpdatePersonResponse>.Fail(person.Error!.Details!);
         }
 
-        await _personRepository.UpdateAsync(person, cancellationToken);
+        await _personRepository.SaveChangesAsync(cancellationToken);
         return ApplicationResult<UpdatePersonResponse>.Success(new UpdatePersonResponse(person.Id));
     }
 
@@ -177,7 +177,7 @@ public class PersonService : IPersonService
             return ApplicationResult<AddFounderResponse>.Fail(person.Error!.Details!);
         }
 
-        await _personRepository.AddFounderAsync(person.Id, founder, cancellationToken);
+        await _personRepository.AddFounderAsync(founder, cancellationToken);
         return ApplicationResult<AddFounderResponse>.Success(new AddFounderResponse(person.Id, founder.Id));
     }
 
@@ -202,7 +202,7 @@ public class PersonService : IPersonService
             return ApplicationResult<UpdateFounderResponse>.Fail(person.Error!.Details!);
         }
 
-        await _personRepository.UpdateAsync(person, cancellationToken);
+        await _personRepository.SaveChangesAsync(cancellationToken);
         return ApplicationResult<UpdateFounderResponse>.Success(new UpdateFounderResponse(person.Id, founder.Id));
     }
 
@@ -221,7 +221,7 @@ public class PersonService : IPersonService
         }
 
         person.RemoveFounder(request.FounderInn);
-        await _personRepository.UpdateAsync(person, cancellationToken);
+        await _personRepository.SaveChangesAsync(cancellationToken);
         return ApplicationResult<RemoveFounderResponse>.Success(new RemoveFounderResponse(person.Id, founder.Id));
     }
 
