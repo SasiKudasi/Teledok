@@ -51,7 +51,7 @@ namespace Teledok.Api.Controllers.Persons
         /// <summary>
         /// Получить клиента по ИНН.
         /// </summary>
-        [HttpGet("{inn}")]
+        [HttpGet("inn/{inn}")]
         [ProducesResponseType(typeof(PersonDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -64,7 +64,7 @@ namespace Teledok.Api.Controllers.Persons
         /// <summary>
         /// Получить юридическое лицо по ИНН вместе с учредителями.
         /// </summary>
-        [HttpGet("legal-entity/{inn}")]
+        [HttpGet("legal-entity/inn/{inn}")]
         [ProducesResponseType(typeof(PersonDtoWithFounders), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
