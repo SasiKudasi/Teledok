@@ -14,6 +14,22 @@ services:
     networks:
       - app-network
 
+  api:
+    container_name: teledok_api
+    build:
+      context: .
+      dockerfile: Teledok.Api/Dockerfile
+      args:
+        BUILD_CONFIGURATION: Release
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    environment:
+      ASPNETCORE_URLS: "http://+:8080;"
+      ASPNETCORE_ENVIRONMENT: "Development"
 
 volumes:
   postgres-data:
