@@ -51,7 +51,7 @@ namespace Teledok.Infrastructure.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("Founders");
+                    b.ToTable("Founder");
                 });
 
             modelBuilder.Entity("Teledok.Domain.Client.Person", b =>
@@ -88,11 +88,13 @@ namespace Teledok.Infrastructure.Migrations
 
             modelBuilder.Entity("Teledok.Domain.Client.Founder", b =>
                 {
-                    b.HasOne("Teledok.Domain.Client.Person", null)
+                    b.HasOne("Teledok.Domain.Client.Person", "Person")
                         .WithMany("Founders")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Teledok.Domain.Client.Person", b =>

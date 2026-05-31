@@ -26,8 +26,8 @@ namespace Teledok.Infrastructure.Configuration
                 .IsRequired();
 
             builder.HasMany(x => x.Founders)
-                .WithOne()
-                .HasForeignKey("PersonId")
+                .WithOne(x => x.Person)
+                .HasForeignKey(x => x.PersonId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Metadata

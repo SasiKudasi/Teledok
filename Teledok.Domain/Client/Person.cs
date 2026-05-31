@@ -51,10 +51,11 @@ public class Person : Entity
         return person;
     }
 
-    public static Founder CreateFounder(Guid? id, string inn, string fullName, DateTime created, DateTime updated)
+    public static Founder CreateFounder(Guid? id, Guid personId, string inn, string fullName, DateTime created, DateTime updated)
     {
         var founder = Founder.Create(
             id ?? Guid.NewGuid(),
+            personId,
             inn,
             fullName,
             created,

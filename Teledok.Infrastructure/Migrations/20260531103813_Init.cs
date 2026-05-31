@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Teledok.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,21 +28,21 @@ namespace Teledok.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Founders",
+                name: "Founder",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PersonId = table.Column<Guid>(type: "uuid", nullable: false),
                     INN = table.Column<string>(type: "character varying(12)", maxLength: 12, nullable: false),
                     FullName = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PersonId = table.Column<Guid>(type: "uuid", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Founders", x => x.Id);
+                    table.PrimaryKey("PK_Founder", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Founders_Persons_PersonId",
+                        name: "FK_Founder_Persons_PersonId",
                         column: x => x.PersonId,
                         principalTable: "Persons",
                         principalColumn: "Id",
@@ -50,8 +50,8 @@ namespace Teledok.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Founders_PersonId",
-                table: "Founders",
+                name: "IX_Founder_PersonId",
+                table: "Founder",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
@@ -65,7 +65,7 @@ namespace Teledok.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Founders");
+                name: "Founder");
 
             migrationBuilder.DropTable(
                 name: "Persons");

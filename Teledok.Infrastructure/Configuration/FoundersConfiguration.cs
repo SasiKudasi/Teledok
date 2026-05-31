@@ -24,8 +24,9 @@ internal sealed class FounderConfiguration : IEntityTypeConfiguration<Founder>
         builder.Property(x => x.UpdatedAt)
             .IsRequired();
 
-        builder.Property<Guid>("PersonId");
+        builder.Property(x => x.PersonId)
+            .IsRequired();
 
-        builder.HasIndex("PersonId");
+        builder.HasIndex(x => x.PersonId);
     }
 }

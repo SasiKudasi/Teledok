@@ -56,7 +56,7 @@ public class PersonService : IPersonService
 
         foreach (var founderReq in request.Founders)
         {
-            person.AddFounder(Founder.Create(null, founderReq.INN, founderReq.Name, DateTime.UtcNow, DateTime.UtcNow));
+            person.AddFounder(Founder.Create(null, person.Id, founderReq.INN, founderReq.Name, DateTime.UtcNow, DateTime.UtcNow));
 
             if (!person.IsValid)
             {
@@ -169,7 +169,7 @@ public class PersonService : IPersonService
             return ApplicationResult<AddFounderResponse>.NotFound($"Person with id: {request.PersonId} not found");
         }
 
-        var founder = Founder.Create(null, request.INN, request.Name, DateTime.UtcNow, DateTime.UtcNow);
+        var founder = Founder.Create(null, person.Id, request.INN, request.Name, DateTime.UtcNow, DateTime.UtcNow);
         person.AddFounder(founder);
 
         if (!person.IsValid)
@@ -177,7 +177,7 @@ public class PersonService : IPersonService
             return ApplicationResult<AddFounderResponse>.Fail(person.Error!.Details!);
         }
 
-        await _personRepository.UpdateAsync(person, cancellationToken);
+        await _personRepository.AddFounderAsync(person.Id, founder, cancellationToken);
         return ApplicationResult<AddFounderResponse>.Success(new AddFounderResponse(person.Id, founder.Id));
     }
 

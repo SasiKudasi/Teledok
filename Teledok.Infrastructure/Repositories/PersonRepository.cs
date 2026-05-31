@@ -17,16 +17,17 @@ public class PersonRepository : IPersonRepository
     public async Task AddAsync(Person person, CancellationToken ct = default)
     {
         _context.Add(person);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
+    }
+
+    public async Task AddFounderAsync(Founder founder, CancellationToken ct = default)
+    {
+        _context.Add(founder);
+        await _context.SaveChangesAsync(ct);
     }
 
     public async Task DeleteAsync(Person person, CancellationToken ct = default)
     {
-        if (_context.Entry(person).State == EntityState.Detached)
-        {
-            _context.Attach(person);
-        }
-
         _context.Remove(person);
         await _context.SaveChangesAsync(ct);
     }
@@ -99,13 +100,8 @@ public class PersonRepository : IPersonRepository
     }
 
 
-    public async Task UpdateAsync(Person person, CancellationToken ct = default)
+    public async Task SaveChangesAsync( CancellationToken ct = default)
     {
-        //if (_context.Entry(person).State == EntityState.Detached)
-        //{
-        //    _context.Update(person);
-        //}
-
         await _context.SaveChangesAsync(ct);
     }
 
