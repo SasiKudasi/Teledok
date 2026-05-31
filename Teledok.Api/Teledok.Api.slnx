@@ -1,12 +1,17 @@
 <Solution>
+  <Folder Name="/Api/">
+    <Project Path="../Teledok.Application/Teledok.Application.csproj" />
+    <Project Path="../Teledok.Domain/Teledok.Domain.csproj" />
+    <Project Path="../Teledok.Infrastructure/Teledok.Infrastructure.csproj" />
+    <Project Path="Teledok.Api.csproj" />
+  </Folder>
   <Folder Name="/Shared/">
     <Project Path="../Teledok.Api.Shared/Teledok.Api.Shared.csproj" />
     <Project Path="../Teledok.Application.Shared/Teledok.Application.Shared.csproj" />
     <Project Path="../Teledok.Contracts.Shared/Teledok.Contracts.Shared.csproj" />
     <Project Path="../Teledok.Domain.Shared/Teledok.Domain.Shared.csproj" />
   </Folder>
-  <Project Path="../Teledok.Application/Teledok.Application.csproj" />
-  <Project Path="../Teledok.Domain/Teledok.Domain.csproj" />
-  <Project Path="../Teledok.Infrastructure/Teledok.Infrastructure.csproj" />
-  <Project Path="Teledok.Api.csproj" />
+  <Folder Name="/Test/">
+    <Project Path="../Teledok.Domain.Test/Teledok.Domain.Test.csproj" Id="b69ec80b-968f-44bb-9200-2d361415e95e" />
+  </Folder>
 </Solution>

@@ -32,7 +32,7 @@ public class PersonService : IPersonService
             return ApplicationResult<CreatePersonResponse>.Fail(person.Error!.Details!);
         }
 
-        await _personRepository.AddAsync(person);
+        await _personRepository.AddAsync(person, cancellationToken);
         return ApplicationResult<CreatePersonResponse>.Success(new CreatePersonResponse(person.Id));
 
     }
